@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 import * as d3 from 'd3';
-import * as d3geo from 'd3-geo';
 import * as topojson from 'topojson-client';
 import { GeometryCollection, Topology } from 'topojson-specification';
 import us from '../assets/counties-10m.json';
@@ -24,7 +23,24 @@ const Map = () => {
   useEffect(() => {
     if (svgRef.current) {
       const svg = d3.select(svgRef.current);
+      svg.selectAll('*').remove();
+
       svg.attr('width', width).attr('height', height);
+
+      svg
+        .append('g')
+        .style('fill', '#fff')
+        .style('cursor', 'pointer')
+        .selectAll('.state')
+        .data(topojson.feature(us as unknown as Topology, us.objects.states as GeometryCollection<{}>).features)
+        .join('path')
+        .on('mouseover', (e, _) => {
+          e.target.setAttribute('fill', '#f00');
+        })
+        .on('mouseout', (e, _) => {
+          e.target.setAttribute('fill', '#fff');
+        })
+        .attr('d', path);
 
       svg
         .append('path')

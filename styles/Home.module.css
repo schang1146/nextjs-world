@@ -22,10 +22,6 @@
   align-items: center;
 }
 
-.map {
-  border: 1px solid red;
-}
-
 .footer {
   display: flex;
   flex: 1;
