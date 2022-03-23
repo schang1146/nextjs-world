@@ -35,7 +35,7 @@ const Map = () => {
         .data(topojson.feature(us as unknown as Topology, us.objects.states as GeometryCollection<{}>).features)
         .join('path')
         .on('mouseover', (e, _) => {
-          e.target.setAttribute('fill', '#f00');
+          e.target.setAttribute('fill', 'pink');
         })
         .on('mouseout', (e, _) => {
           e.target.setAttribute('fill', '#fff');
