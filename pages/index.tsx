@@ -11,6 +11,8 @@ import us from '../assets/counties-10m.json';
 
 const Map = () => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
   const width = 1000;
   const height = 600;
   const defaultScale = d3.geoAlbersUsa().scale();
@@ -21,8 +23,9 @@ const Map = () => {
   const path = d3.geoPath().projection(projection);
 
   useEffect(() => {
-    if (svgRef.current) {
+    if (svgRef.current && tooltipRef.current) {
       const svg = d3.select(svgRef.current);
+      const tooltip = tooltipRef.current;
       svg.selectAll('*').remove();
 
       svg.attr('width', width).attr('height', height);
@@ -36,9 +39,11 @@ const Map = () => {
         .join('path')
         .on('mouseover', (e, _) => {
           e.target.setAttribute('fill', 'pink');
+          tooltip.style.display = 'block';
         })
         .on('mouseout', (e, _) => {
           e.target.setAttribute('fill', '#fff');
+          tooltip.style.display = 'none';
         })
         .attr('d', path);
 
@@ -67,9 +72,29 @@ const Map = () => {
         .style('stroke-linecap', 'round')
         .style('fill', 'none');
     }
-  }, [svgRef.current]);
+  }, [svgRef.current, tooltipRef.current]);
 
-  return <svg id='map' className={styles.map} ref={svgRef}></svg>;
+  useEffect(() => {
+    if (tooltipRef.current) {
+      const tooltip = tooltipRef.current;
+      window.addEventListener('mousemove', (e: MouseEvent) => {
+        const x = e.clientX;
+        const y = e.clientY;
+
+        tooltip.style.top = `${y + 20}px`;
+        tooltip.style.left = `${x + 20}px`;
+      });
+    }
+  }, [tooltipRef.current]);
+
+  return (
+    <div>
+      <svg id='map' className={styles.map} ref={svgRef}></svg>{' '}
+      <div className={styles.tooltip} ref={tooltipRef}>
+        Hello world!
+      </div>
+    </div>
+  );
 };
 
 const Home: NextPage = () => {
