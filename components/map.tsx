@@ -87,10 +87,7 @@ const Map = () => {
 
   return (
     <div>
-      <svg id='map' className={styles.map} ref={svgRef}></svg>{' '}
-      <div className={styles.tooltip} ref={tooltipRef}>
-        Hello world!
-      </div>
+      <svg id='map' className={styles.map} ref={svgRef}></svg> <div className={styles.tooltip} ref={tooltipRef}></div>
     </div>
   );
 };
